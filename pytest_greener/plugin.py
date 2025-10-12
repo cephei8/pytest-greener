@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 
 import pytest
@@ -46,7 +47,16 @@ class ReportWhen:
 
 class GreenerReporter:
     def __init__(self) -> None:
-        self.reporter = Reporter()
+        ingress_endpoint = os.environ.get("GREENER_INGRESS_ENDPOINT")
+        if ingress_endpoint is None:
+            raise ValueError("GREENER_INGRESS_ENDPOINT is not set")
+        
+        ingress_api_key = os.environ.get("GREENER_INGRESS_API_KEY")
+        if ingress_api_key is None:
+            raise ValueError("GREENER_INGRESS_API_KEY is not set")
+
+        self.reporter = Reporter(ingress_endpoint, ingress_api_key)
+
         self._session_id = None
         self._testsuite = None
 
@@ -59,7 +69,18 @@ class GreenerReporter:
 
     @pytest.hookimpl(wrapper=True)
     def pytest_sessionstart(self, session):
-        greener_session = self.reporter.create_session()
+        session_id = os.environ.get("GREENER_SESSION_ID")
+        description = os.environ.get("GREENER_SESSION_DESCRIPTION")
+        baggage = os.environ.get("GREENER_SESSION_BAGGAGE")
+        labels = os.environ.get("GREENER_SESSION_LABELS")
+
+        greener_session = self.reporter.create_session(
+            session_id,
+            description,
+            baggage,
+            labels,
+        )
+
         self._session_id = greener_session.id
         yield
 
@@ -93,7 +114,7 @@ class GreenerReporter:
         yield
 
 
-def _parse_nodeid(address: str) -> (str, Optional[str], str):
+def _parse_nodeid(address: str) -> tuple[str, Optional[str], str]:
     path, possible_open_bracket, params = address.partition("[")
     names = path.split("::")
 
