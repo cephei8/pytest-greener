@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pytest-greener"
-version = "1.0.0"
+version = "1.1.0"
 description = "Pytest plugin for Greener"
 authors = ["cephei8"]
 readme = "README.md"
