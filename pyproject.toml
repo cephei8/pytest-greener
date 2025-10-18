@@ -11,7 +11,7 @@ pytest11 = { greener = "pytest_greener.plugin" }
 [tool.poetry.dependencies]
 python = "^3.8"
 pytest = "^8.3.3"
-greener-reporter = "1.0.0"
+greener-reporter = "1.1.0"
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"
