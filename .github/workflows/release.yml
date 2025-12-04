@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release_create:
+    name: (Release) Create release
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    environment: pypi
+    permissions:
+      id-token: write
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - run: pipx install poetry
+      - run: poetry install
+      - run: poetry run pytest -v .
+      - run: poetry build
+
+      - name: Extract package version
+        run: |
+          export PKG_VERSION=$(poetry version -s | tr -d '[:space:]')
+          echo "GREENER_PKG_VERSION=$PKG_VERSION" >> "$GITHUB_ENV"
+
+      - name: Create release
+        run: |
+          gh release create v${{ env.GREENER_PKG_VERSION }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@release/v1
