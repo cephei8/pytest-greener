@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pytest-greener"
-version = "0.11.0"
+version = "0.12.0"
 description = "Pytest plugin for Greener"
 authors = ["cephei8"]
 readme = "README.md"
@@ -11,7 +11,7 @@ pytest11 = { greener = "pytest_greener.plugin" }
 [tool.poetry.dependencies]
 python = "^3.8"
 pytest = "^8.3.3"
-greener-reporter = "0.11.0"
+greener-reporter = "0.12.0"
 
 [tool.poetry.group.test.dependencies]
 coverage = "*"
