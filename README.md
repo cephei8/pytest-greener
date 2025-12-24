@@ -1,4 +1,7 @@
-# Greener Pytest Plugin 
+# Greener Pytest Plugin
+
+[![PyPI version](https://img.shields.io/pypi/v/pytest-greener.svg)](https://pypi.org/project/pytest-greener/)
+
 Pytest plugin for [Greener](https://github.com/cephei8/greener).
 
 ## Contributing
